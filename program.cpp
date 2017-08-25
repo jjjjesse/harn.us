@@ -1,9 +1,29 @@
 #include <iostream>
 #include <string>
 #include <ctime>
+#include <vector>
  
-
 using namespace std;
+
+struct project
+{
+    vector<subjects> subjects;
+};
+
+struct subject
+{
+    int final_mark;
+    vector<time_record> time_records;
+};
+
+struct time_record
+{
+    time_t start_time;
+    time_t end_time;
+    int seconds;
+    int minutes;
+    int hours;
+};
 
 void clear_screen()
 {
@@ -26,8 +46,6 @@ void ticker(time_t start_time, time_t current_time)
         cout << "Time elapsed: " << fixed << seconds << "\r";
 
     }
-
-
 }
 
 void print_time(time_t current_time)
