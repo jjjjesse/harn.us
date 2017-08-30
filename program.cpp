@@ -2,19 +2,15 @@
 #include <string>
 #include <ctime>
 #include <vector>
+#include <math.h>   
  
 using namespace std;
 
-struct project
+enum menu
 {
-    vector<subjects> subjects;
+
 };
 
-struct subject
-{
-    int final_mark;
-    vector<time_record> time_records;
-};
 
 struct time_record
 {
@@ -23,6 +19,17 @@ struct time_record
     int seconds;
     int minutes;
     int hours;
+};
+
+struct subject
+{
+    int final_mark;
+    vector<time_record> time_records;
+};
+
+struct project
+{
+    vector<subject> subjects;
 };
 
 void clear_screen()
@@ -37,15 +44,49 @@ time_t get_current_time()
     return current_time;
 }
 
-void ticker(time_t start_time, time_t current_time)
+void seconds_to_hours(double seconds, time_record &timer)
+{
+    double temp_minutes; // 188
+    timer.seconds = fmod(seconds, 60);   //8
+    temp_minutes = (seconds - timer.seconds)/60; //180
+    timer.minutes = fmod(temp_minutes, 60); //0
+    timer.hours = (temp_minutes - timer.minutes)/60;
+}
+
+
+void display_timer(time_record timer)
+{
+    cout << "Time elapsed: ";
+    cout << timer.hours << ":";
+    if (timer.minutes < 10)
+    {    
+        cout << 0 << timer.minutes;  
+    }
+    else
+    {
+        cout << timer.minutes;
+    }
+    cout << ":";
+    if (timer.seconds < 10)
+    {
+         cout << 0 << timer.seconds;
+    }
+    else
+    {
+        cout << timer.seconds;
+    }
+    cout << "\r" << flush;
+}
+
+void ticker(time_record timer)
 {
     double seconds;
-    seconds = std::difftime(current_time,start_time);
+    time_t current_time;
+    current_time = get_current_time();
+    seconds = std::difftime(current_time, timer.start_time);
     cout.precision(0);
-    {
-        cout << "Time elapsed: " << fixed << seconds << "\r";
-
-    }
+    seconds_to_hours(seconds, timer);
+    display_timer(timer);
 }
 
 void print_time(time_t current_time)
@@ -61,15 +102,13 @@ void print_time(time_t current_time)
 int main()
 {
     clear_screen();
-    time_t start_time, current_time;
-    start_time = get_current_time();
-    print_time(start_time);
+    time_record timer;
+    timer.start_time = get_current_time();
+    print_time(timer.start_time);
     while(true)
     {
-        current_time = get_current_time();
-        ticker(start_time, current_time);
+        ticker(timer);
     }
-    print_time(current_time);
 
     
     return 0;
