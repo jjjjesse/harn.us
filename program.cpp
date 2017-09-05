@@ -53,30 +53,34 @@ void seconds_to_hours(double seconds, time_record &timer)
 
 void display_timer(time_record timer)
 {
-    cout << "Time elapsed: ";
-    cout << timer.hours << ":";
+    write("\r");
+    write("Time elapsed: ");
+    write(timer.hours);
+    write(":");
     if (timer.minutes < 10)
     {    
-        cout << 0 << timer.minutes;  
+        write(0);
+        write(timer.minutes);  
     }
     else
     {
-        cout << timer.minutes;
+        write(timer.minutes);
     }
-    cout << ":";
+    write(":");
     if (timer.seconds < 10)
     {
-         cout << 0 << timer.seconds;
+         write(0);
+         write(timer.seconds);
     }
     else
     {
-        cout << timer.seconds;
+        write(timer.seconds);
     }
-    cout << "\r" << flush;
 }
 
 void ticker(time_record timer)
 {
+    set_terminal_bold(true);
     double seconds;
     time_t current_time;
     current_time = get_current_time();
@@ -84,6 +88,8 @@ void ticker(time_record timer)
     cout.precision(0);
     seconds_to_hours(seconds, timer);
     display_timer(timer);
+    refresh_terminal();
+    set_terminal_bold(false);
 }
 
 void print_time(time_t current_time)
@@ -92,8 +98,16 @@ void print_time(time_t current_time)
     local_time = localtime( &current_time );
     local_time->tm_mon  = local_time->tm_mon + 1;
     local_time->tm_year   = local_time->tm_year + 1900;
-    std::cout << "Timer started at: " << local_time->tm_hour << ":" << local_time->tm_min << std::endl;
-    std::cout << "And the current date is: " << local_time->tm_mday << "/" << local_time->tm_mon << "/" << local_time->tm_year << std::endl;   
+    write("Timer started at: ");
+    write(local_time->tm_hour);
+    write(":");
+    write(local_time->tm_min);
+    write(" ");
+    write(local_time->tm_mday);
+    write("/");
+    write(local_time->tm_mon);
+    write("/");
+    write_line(local_time->tm_year);   
 }
 
 void print_menu()
@@ -117,14 +131,22 @@ time_record new_timer()
         }
         process_events();
     }
-    std::cout << "Timer stopped.";
+    write_line("Timer stopped.");
     return timer;
+}
+
+void setup_terminal()
+{
+    activate_advanced_terminal();
+    set_terminal_colors(color_yellow(), color_dark_blue());
+    set_terminal_echo_input(false);
+    clear_terminal(); 
 }
 
 int main()
 {
-    activate_advanced_terminal();
-    clear_terminal();
+    setup_terminal();
+    
     print_menu();
     new_timer();
     return 0;
