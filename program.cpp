@@ -1,14 +1,16 @@
+#include "splashkit.h"
+
 #include <iostream>
-#include <string>
 #include <ctime>
 #include <vector>
 #include <math.h>   
  
 using namespace std;
 
-enum menu
+enum menu_option
 {
-
+    START_STOP_TIMER,
+    QUIT
 };
 
 
@@ -31,11 +33,6 @@ struct project
 {
     vector<subject> subjects;
 };
-
-void clear_screen()
-{
-   cout << string( 100, '\n' );
-}
 
 time_t get_current_time()
 {
@@ -99,17 +96,36 @@ void print_time(time_t current_time)
     std::cout << "And the current date is: " << local_time->tm_mday << "/" << local_time->tm_mon << "/" << local_time->tm_year << std::endl;   
 }
 
-int main()
+void print_menu()
 {
-    clear_screen();
+
+}
+
+time_record new_timer()
+{
+    bool timer_running = true;
     time_record timer;
     timer.start_time = get_current_time();
     print_time(timer.start_time);
-    while(true)
-    {
+    while(timer_running == true)
+    { 
         ticker(timer);
+        if (key_typed(UP_KEY)) // NOT WORKING
+        {
+            timer.end_time = get_current_time();
+            timer_running =false;
+        }
+        process_events();
     }
+    std::cout << "Timer stopped.";
+    return timer;
+}
 
-    
+int main()
+{
+    activate_advanced_terminal();
+    clear_terminal();
+    print_menu();
+    new_timer();
     return 0;
 }

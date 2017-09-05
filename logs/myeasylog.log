@@ -1,0 +1,15 @@
+2017-09-05 19:13:18,031 FATAL [default] CRASH HANDLED; Application has crashed due to [SIGINT] signal
+2017-09-05 19:13:18,032 WARN  [default] Aborting application. Reason: Fatal log at [/home/jesse/.splashkit/source/../include/easylogging++.h:5627]
+2017-09-05 19:14:06,485 FATAL [default] CRASH HANDLED; Application has crashed due to [SIGINT] signal
+2017-09-05 19:14:06,486 WARN  [default] Aborting application. Reason: Fatal log at [/home/jesse/.splashkit/source/../include/easylogging++.h:5627]
+2017-09-05 19:41:30,833 FATAL [default] CRASH HANDLED; Application has crashed due to [SIGINT] signal
+2017-09-05 19:41:30,833 WARN  [default] Aborting application. Reason: Fatal log at [/home/jesse/.splashkit/source/../include/easylogging++.h:5627]
+2017-09-05 19:46:26,070 WARN  [default] You must activate advanced terminal features to clear the terminal
+2017-09-05 19:47:44,738 FATAL [default] CRASH HANDLED; Application has crashed due to [SIGINT] signal
+2017-09-05 19:47:44,738 WARN  [default] Aborting application. Reason: Fatal log at [/home/jesse/.splashkit/source/../include/easylogging++.h:5627]
+2017-09-05 19:48:39,873 FATAL [default] CRASH HANDLED; Application has crashed due to [SIGINT] signal
+2017-09-05 19:48:39,873 WARN  [default] Aborting application. Reason: Fatal log at [/home/jesse/.splashkit/source/../include/easylogging++.h:5627]
+2017-09-05 19:49:56,127 FATAL [default] CRASH HANDLED; Application has crashed due to [SIGINT] signal
+2017-09-05 19:49:56,127 WARN  [default] Aborting application. Reason: Fatal log at [/home/jesse/.splashkit/source/../include/easylogging++.h:5627]
+2017-09-05 19:49:58,521 FATAL [default] CRASH HANDLED; Application has crashed due to [SIGINT] signal
+2017-09-05 19:49:58,521 WARN  [default] Aborting application. Reason: Fatal log at [/home/jesse/.splashkit/source/../include/easylogging++.h:5627]
