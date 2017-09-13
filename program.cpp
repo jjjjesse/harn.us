@@ -3,7 +3,8 @@
 #include <iostream>
 #include <ctime>
 #include <vector>
-#include <math.h>   
+#include <math.h> 
+#include <thread>        
  
 using namespace std;
 
@@ -115,7 +116,16 @@ void print_menu()
 
 }
 
-time_record new_timer()
+void user_input(char &input)
+{
+    while(true)
+    {
+        std::cin>>input;  // need to close properly
+    }
+    write_line("Thread1");   
+}
+
+time_record new_timer(char &input)
 {
     bool timer_running = true;
     time_record timer;
@@ -123,15 +133,17 @@ time_record new_timer()
     print_time(timer.start_time);
     while(timer_running == true)
     { 
+        process_events();
         ticker(timer);
-        if (key_typed(UP_KEY)) // NOT WORKING
+        
+        if (input == 's') // NEED TO RUN SEPERATE THREAD
         {
             timer.end_time = get_current_time();
-            timer_running =false;
+            timer_running = false;
         }
-        process_events();
     }
     write_line("Timer stopped.");
+    refresh_terminal();
     return timer;
 }
 
@@ -145,9 +157,13 @@ void setup_terminal()
 
 int main()
 {
+    char input;
     setup_terminal();
-    
+    thread check_input(user_input, std::ref(input));
+    check_input.detach();    
     print_menu();
-    new_timer();
+    new_timer(input);
+    write_line("finished");
+    refresh_terminal();
     return 0;
 }
