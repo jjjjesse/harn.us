@@ -44,10 +44,10 @@ time_t get_current_time()
 
 void seconds_to_hours(double seconds, time_record &timer)
 {
-    double temp_minutes; // 188
-    timer.seconds = fmod(seconds, 60);   //8
-    temp_minutes = (seconds - timer.seconds)/60; //180
-    timer.minutes = fmod(temp_minutes, 60); //0
+    double temp_minutes;
+    timer.seconds = fmod(seconds, 60);
+    temp_minutes = (seconds - timer.seconds)/60;
+    timer.minutes = fmod(temp_minutes, 60);
     timer.hours = (temp_minutes - timer.minutes)/60;
 }
 
@@ -120,9 +120,8 @@ void user_input(char &input)
 {
     while(true)
     {
-        std::cin>>input;  // need to close properly
-    }
-    write_line("Thread1");   
+        std::cin>>input;
+    }   
 }
 
 time_record new_timer(char &input)
@@ -133,10 +132,9 @@ time_record new_timer(char &input)
     print_time(timer.start_time);
     while(timer_running == true)
     { 
-        process_events();
         ticker(timer);
         
-        if (input == 's') // NEED TO RUN SEPERATE THREAD
+        if (input == 's') 
         {
             timer.end_time = get_current_time();
             timer_running = false;
