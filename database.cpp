@@ -17,7 +17,12 @@
 // http://mongoc.org/libmongoc/current/installing.html
 
 
+
+// to compile 
+// skm clang++ test.cpp -pthread $(pkg-config --cflags --libs libmongocxx)
 // Recommended:
+
+//jtdio321
 
 #include <cstdint>
 #include <iostream>
