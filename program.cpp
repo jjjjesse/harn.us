@@ -1,10 +1,12 @@
 #include "splashkit.h"
+#include "harnus.h"
 
 #include <iostream>
 #include <ctime>
 #include <vector>
 #include <math.h> 
-#include <thread>        
+#include <thread> 
+#include <sqlite3.h>       
  
 using namespace std;
 
