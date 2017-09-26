@@ -10,17 +10,6 @@
  
 using namespace std;
 
-
-
-
-
-enum menu_option
-{
-    START_STOP_TIMER,
-    QUIT
-};
-
-
 struct time_record
 {
     time_t start_time;
@@ -106,8 +95,16 @@ void print_time(time_t current_time)
     local_time->tm_mon  = local_time->tm_mon + 1;
     local_time->tm_year   = local_time->tm_year + 1900;
     write("Timer started at: ");
+    if (local_time->tm_hour < 9)
+    {
+        write("0");
+    }
     write(local_time->tm_hour);
     write(":");
+    if (local_time->tm_min < 9)
+    {
+        write("0");
+    }
     write(local_time->tm_min);
     write(" ");
     write(local_time->tm_mday);
@@ -117,10 +114,6 @@ void print_time(time_t current_time)
     write_line(local_time->tm_year);   
 }
 
-void print_menu()
-{
-
-}
 
 void user_input(char &input)
 {
@@ -135,9 +128,11 @@ time_record new_timer(char &input)
     bool timer_running = true;
     time_record timer;
     timer.start_time = get_current_time();
-    print_time(timer.start_time);
     while(timer_running == true)
     { 
+        clear_terminal();
+        move_cursor_to(0,0);
+        print_time(timer.start_time);
         ticker(timer);
         
         if (input == 's') 
@@ -151,6 +146,30 @@ time_record new_timer(char &input)
     return timer;
 }
 
+void print_menu()
+{
+    move_cursor_to(0,0);
+    write_line("1: START TIMER");
+    write_line("2: QUIT");
+    refresh_terminal();
+}
+
+bool menu_action(char &input)
+{
+    switch(input)
+    {
+        case '1':
+            clear_terminal(); 
+            new_timer(input);
+            return false;
+        case '2':
+            return true;
+        default:
+            return false;
+    }
+}
+
+
 void setup_terminal()
 {
     activate_advanced_terminal();
@@ -161,13 +180,22 @@ void setup_terminal()
 
 int main()
 {
+    bool quit = false;
+
     char input;
     setup_terminal();
     thread check_input(user_input, std::ref(input));
-    check_input.detach();    
+    check_input.detach();
+    
     print_menu();
-    new_timer(input);
-    write_line("finished");
-    refresh_terminal();
+    while(quit == false)
+    {
+        print_menu();
+        quit = menu_action(input);
+    }
+
+    write(input);
+    end_advanced_terminal();
+
     return 0;
 }
