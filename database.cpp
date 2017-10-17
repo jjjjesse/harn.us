@@ -78,22 +78,29 @@ void setup_tables()
 
     subject_sql = "CREATE TABLE SUBJECT("           
          "SUBJECT_ID INT PRIMARY KEY     NOT NULL," 
-         "PROJECT_ID INT FOREIGN KEY     NOT NULL,"  
+         "PROJECT_ID INT                 NOT NULL,"  
          "SUBJECT_NAME   TEXT            NOT NULL," 
-         "FINAL_MARK INT);";
+         "FINAL_MARK INT                         ,"
+         "FOREIGN KEY(PROJECT_ID) REFERENCES PROJECT(PROJECT_ID));";
 
     record_sql =  "CREATE TABLE RECORD("            
          "RECORD_ID INT PRIMARY KEY      NOT NULL," 
-         "SUBJECT_ID INT FOREIGN KEY     NOT NULL," 
+         "SUBJECT_ID INT                 NOT NULL," 
          "PROJECT_NAME   TEXT            NOT NULL,"  
          "START_TIME     TEXT            NOT NULL," 
          "END_TIME       TEXT            NOT NULL," 
          "SECONDS        INT             NOT NULL," 
          "MINUTES        INT             NOT NULL," 
-         "HOURS          INT             NOT NULL);";
+         "HOURS          INT             NOT NULL,"
+         "FOREIGN KEY(SUBJECT_ID) REFERENCES SUBJECT(SUBJECT_ID));";
 
     create_table(project_sql);
     create_table(subject_sql);
     create_table(record_sql);
-    refresh_terminal();
+}
+
+
+void insert_time_record()
+{
+
 }

@@ -6,7 +6,8 @@
 #include <vector>
 #include <math.h> 
 #include <thread> 
-#include <sqlite3.h>       
+#include <sqlite3.h>  
+#include <chrono>     
  
 using namespace std;
 
@@ -76,6 +77,7 @@ void display_timer(time_record timer)
 
 void ticker(time_record timer)
 {
+    move_cursor_to(0,1);
     set_terminal_bold(true);
     double seconds;
     time_t current_time;
@@ -84,8 +86,10 @@ void ticker(time_record timer)
     cout.precision(0);
     seconds_to_hours(seconds, timer);
     display_timer(timer);
-    refresh_terminal();
     set_terminal_bold(false);
+    write_line("\nPress [0] to stop");
+    refresh_terminal();
+    
 }
 
 void print_time(time_t current_time)
@@ -94,7 +98,6 @@ void print_time(time_t current_time)
     local_time = localtime( &current_time );
     local_time->tm_mon  = local_time->tm_mon + 1;
     local_time->tm_year   = local_time->tm_year + 1900;
-    write("Timer started at: ");
     if (local_time->tm_hour < 9)
     {
         write("0");
@@ -125,6 +128,7 @@ void user_input(char &input)
 
 time_record new_timer(char &input)
 {
+    input = '\0';
     bool timer_running = true;
     time_record timer;
     timer.start_time = get_current_time();
@@ -132,17 +136,20 @@ time_record new_timer(char &input)
     { 
         clear_terminal();
         move_cursor_to(0,0);
+        write("Timer started at: ");
         print_time(timer.start_time);
         ticker(timer);
         
-        if (input == 's') 
+        if (input == '0') 
         {
             timer.end_time = get_current_time();
             timer_running = false;
         }
     }
+    move_cursor_to(0,2);
     write_line("Timer stopped.");
     refresh_terminal();
+    input = '\0';
     return timer;
 }
 
@@ -182,11 +189,14 @@ int main()
 {
     bool quit = false;
 
+    setup_tables();
+    std::this_thread::sleep_for (std::chrono::seconds(5));
+
     char input;
     setup_terminal();
     thread check_input(user_input, std::ref(input));
     check_input.detach();
-    
+
     print_menu();
     while(quit == false)
     {
