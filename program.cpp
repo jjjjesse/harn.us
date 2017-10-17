@@ -1,9 +1,7 @@
-#include "splashkit.h"
 #include "harnus.h"
 
 #include <iostream>
 #include <vector>
-#include <math.h> 
 #include <thread> 
 #include <sqlite3.h>  
 #include <chrono>     

@@ -1,9 +1,8 @@
 #include <ctime>
-
-
-
-
-
+#include "splashkit.h"
+#include <math.h>
+#include <iostream>
+#include <vector>
 
 struct time_record
 {
@@ -12,9 +11,11 @@ struct time_record
     int seconds;
     int minutes;
     int hours;
-    bool stored;
+    int subject_id;
 };
 
+
+/*
 struct subject
 {
     int final_mark;
@@ -25,7 +26,7 @@ struct project
 {
     vector<subject> subjects;
 };
-
+*/
 
 
 
