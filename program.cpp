@@ -13,7 +13,7 @@ void user_input(char &input)
     while(true)
     {
         std::cin>>input;
-        std::this_thread::sleep_for(std::chrono::milliseconds(30));
+        std::this_thread::sleep_for (std::chrono::seconds(1));
     } 
 }
 
@@ -44,6 +44,7 @@ void add_subject()
 
 void print_project_menu(vector<vector<string>> projects)
 {
+    clear_terminal();
     move_cursor_to(0,0);
     write_line("CHOOSE PROJECT:");
     for(int i = 0; i < projects.size(); i++)
@@ -67,7 +68,9 @@ bool choose_project(char &input, vector<vector<string>> projects)
         case '*':
             add_project();
             input = '\0';
-            return false;
+            return true;
+        case '0':
+            return true;
         default:
             return false;
     }
