@@ -68,18 +68,18 @@ void setup_tables()
     const char *record_sql;
 
     project_sql = "CREATE TABLE PROJECT("           
-         "PROJECT_ID INT PRIMARY KEY     NOT NULL," 
+         "PROJECT_ID INTEGER PRIMARY KEY     NOT NULL," 
          "PROJECT_NAME   TEXT            NOT NULL);";
 
     subject_sql = "CREATE TABLE SUBJECT("           
-         "SUBJECT_ID INT PRIMARY KEY     NOT NULL," 
+         "SUBJECT_ID INTEGER PRIMARY KEY     NOT NULL," 
          "PROJECT_ID INT                 NOT NULL,"  
          "SUBJECT_NAME   TEXT            NOT NULL," 
          "FINAL_MARK INT                         ,"
          "FOREIGN KEY(PROJECT_ID) REFERENCES PROJECT(PROJECT_ID));";
 
     record_sql =  "CREATE TABLE RECORD("            
-         "RECORD_ID INT PRIMARY KEY      NOT NULL," 
+         "RECORD_ID INTEGER PRIMARY KEY      NOT NULL," 
          "SUBJECT_ID INT                 NOT NULL," 
          "PROJECT_NAME   TEXT            NOT NULL,"  
          "START_TIME     TEXT            NOT NULL," 
@@ -135,12 +135,12 @@ vector<vector<string>> get_projects()
     return result;
 }
 
-void add_project(string project_name)
+void add_project_sql(string project_name)
 {
     string sql_string;
     const char *sql;
 
-    sql_string = "INSERT INTO PROJECT (PROJECT_NAME) VALUES ('" + project_name + "')";
+    sql_string = "INSERT INTO PROJECT (PROJECT_NAME) VALUES ('" + project_name + "');";
     sql = sql_string.c_str();
     execute_sql(sql); 
 }

@@ -5,7 +5,7 @@
 #include <sqlite3.h>  
 #include <chrono>     
  
-using namespace std;
+
 
 
 void user_input(char &input)
@@ -13,12 +13,28 @@ void user_input(char &input)
     while(true)
     {
         std::cin>>input;
-    }   
+        std::this_thread::sleep_for(std::chrono::milliseconds(30));
+    } 
 }
 
 void add_project()
 {
-    
+    set_terminal_echo_input(true);
+    clear_terminal();
+    string name;
+    move_cursor_to(0,0);
+    write_line("ADDING PROJECT:");
+    write_line("What is the project name?");
+    move_cursor_to(0,5);
+    write_line("Enter '0' and press ENTER to cancel");
+    move_cursor_to(0,2);
+    refresh_terminal();
+    name = trim(read_line());
+    if(name != "0")
+    {
+        add_project_sql(name);
+    }
+    set_terminal_echo_input(false);
 }
 
 void add_subject()
@@ -26,20 +42,43 @@ void add_subject()
 
 }
 
-void choose_project()
+void print_project_menu(vector<vector<string>> projects)
 {
     move_cursor_to(0,0);
     write_line("CHOOSE PROJECT:");
-    write_line("0: ADD PROJECT");
+    for(int i = 0; i < projects.size(); i++)
+    {
+        for(int j = 0; j < projects[i].size(); j++)
+        {
+            write(projects[i][j] + " ");
+        }
+        write("\n");
+    }
+    write_line("*: ADD PROJECT");
+    write_line("0: BACK");
     refresh_terminal();
 }
 
-void choose_subject()
+bool choose_project(char &input, vector<vector<string>> projects)
+{
+    print_project_menu(projects);
+    switch(input)
+    {
+        case '*':
+            add_project();
+            input = '\0';
+            return false;
+        default:
+            return false;
+    }
+}
+
+void choose_subject(char &input)
 {
     move_cursor_to(0,0);
     write_line("CHOOSE SUBJECT:");
-    // Print  
-    write_line("0: ADD SUBJECT");
+   
+    write_line("*: ADD SUBJECT");
     refresh_terminal();
 }
 
@@ -50,12 +89,15 @@ void print_menu()
     write_line("2: CHANGE PROJECT");
     write_line("3: CHANGE SUBJECT");
     write_line("4: DISPLAY ENTRIES");
-    write_line("5: QUIT");
+    write_line("0: QUIT");
     refresh_terminal();
 }
 
 bool menu_action(char &input)
 {
+    bool back;
+    vector<vector<string>> projects;
+    print_menu();
     switch(input)
     {
         case '1':
@@ -63,13 +105,18 @@ bool menu_action(char &input)
             new_timer(input);
             return false;
         case '2':
-            choose_project();
+            input = '\0';
+            projects = get_projects();
+            while (back == false)
+            {
+                back = choose_project(input, projects);
+            }
             return false;
         case '3':
             return false;
         case '4':
             return false;
-        case '5':
+        case '0':
             return true;
         default:
             return false;
@@ -102,7 +149,6 @@ int main()
     print_menu();
     while(quit == false)
     {
-        print_menu();
         quit = menu_action(input);
     }
 

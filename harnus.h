@@ -49,4 +49,4 @@ void create_table(char *sql);
 void setup_tables();
 vector<vector<string>> select_data(const char *sql);
 vector<vector<string>> get_projects();
-void add_project(string project_name);
+void add_project_sql(string project_name);
