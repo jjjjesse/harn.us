@@ -1,8 +1,14 @@
-#include <ctime>
 #include "splashkit.h"
+
+#include <ctime>
 #include <math.h>
 #include <iostream>
 #include <vector>
+#include <stdio.h>
+#include <stdlib.h>
+#include <sqlite3.h>
+
+using namespace std;
 
 struct time_record
 {
@@ -29,7 +35,7 @@ struct project
 */
 
 
-
+//FROM TIMER.CPP
 time_t get_current_time();
 void seconds_to_hours(double seconds, time_record &timer);
 void display_timer(time_record timer);
@@ -37,7 +43,10 @@ void ticker(time_record timer);
 void print_time(time_t current_time);
 time_record new_timer(char &input);
 
-
-void connect_database();
+//FROM DATABASE.CPP
+sqlite3* connect_database();
 void create_table(char *sql);
 void setup_tables();
+vector<vector<string>> select_data(const char *sql);
+vector<vector<string>> get_projects();
+void add_project(string project_name);

@@ -1,10 +1,6 @@
-#include "splashkit.h"
+#include "harnus.h"
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <sqlite3.h>
 
-using namespace std;
 
 
 // Syncing sqlite to online database
@@ -43,7 +39,7 @@ sqlite3* connect_database()
     return db;
 }
 
-void create_table(const char *sql)
+void execute_sql(const char *sql)
 {
     sqlite3 *db;
     char *zErrMsg = 0;
@@ -63,7 +59,6 @@ void create_table(const char *sql)
     }    
     sqlite3_close(db);
 }
-
 
 
 void setup_tables()
@@ -94,13 +89,58 @@ void setup_tables()
          "HOURS          INT             NOT NULL,"
          "FOREIGN KEY(SUBJECT_ID) REFERENCES SUBJECT(SUBJECT_ID));";
 
-    create_table(project_sql);
-    create_table(subject_sql);
-    create_table(record_sql);
+    execute_sql(project_sql);
+    execute_sql(subject_sql);
+    execute_sql(record_sql);
 }
 
-
-void insert_time_record()
+vector<vector< string> > select_data(const char *sql)
 {
+    sqlite3 *db;
+    vector<vector<string>> result;
+    sqlite3_stmt *stmt;
+    int rc;
+    db = connect_database();
+    rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
+    int columns = sqlite3_column_count(stmt);
 
+    if (rc != SQLITE_OK) {
+        cerr << "SELECT failed: " << sqlite3_errmsg(db) << endl;
+    }
+    else
+    {
+        while ((rc = sqlite3_step(stmt)) == SQLITE_ROW) {
+            int id = sqlite3_column_int(stmt, 0);
+            vector<string> record;
+            for(int i = 0; i < columns; i++)
+            {
+                record.push_back(reinterpret_cast<const char*>(sqlite3_column_text(stmt, i)));
+            }
+            result.push_back(record);
+        }
+        if (rc != SQLITE_DONE) {
+            cerr << "SELECT failed: " << sqlite3_errmsg(db) << endl;
+        }
+    sqlite3_finalize(stmt);
+    }
+    return result;
+}
+
+vector<vector<string>> get_projects()
+{
+    const char *sql;
+    vector<vector<string>> result;
+    sql = "SELECT * FROM PROJECT";
+    result = select_data(sql);
+    return result;
+}
+
+void add_project(string project_name)
+{
+    string sql_string;
+    const char *sql;
+
+    sql_string = "INSERT INTO PROJECT (PROJECT_NAME) VALUES ('" + project_name + "')";
+    sql = sql_string.c_str();
+    execute_sql(sql); 
 }

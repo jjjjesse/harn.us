@@ -44,6 +44,7 @@ void display_timer(time_record timer)
         write(timer.seconds);
     }
 }
+
 void ticker(time_record timer)
 {
     move_cursor_to(0,1);
