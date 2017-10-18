@@ -85,7 +85,7 @@ void print_time(time_t current_time)
     write_line(local_time->tm_year);   
 }
 
-time_record new_timer(char &input)
+void new_timer(char &input, current_subject &subject)
 {
     input = '\0';
     bool timer_running = true;
@@ -109,5 +109,5 @@ time_record new_timer(char &input)
     write_line("Timer stopped.");
     refresh_terminal();
     input = '\0';
-    return timer;
+    add_time_record(timer, subject);
 }

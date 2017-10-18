@@ -39,28 +39,43 @@ void add_project()
 
 void add_subject()
 {
-
+    set_terminal_echo_input(true);
+    clear_terminal();
+    string name;
+    move_cursor_to(0,0);
+    write_line("ADDING SUBJECT:");
+    write_line("What is the subject name?");
+    move_cursor_to(0,5);
+    write_line("Enter '0' and press ENTER to cancel");
+    move_cursor_to(0,2);
+    refresh_terminal();
+    name = trim(read_line());
+    if(name != "0")
+    {
+        add_project_sql(name);
+    }
+    set_terminal_echo_input(false);
 }
 
-void print_project_menu(vector<vector<string>> projects)
+void print_project_menu(table projects)
 {
     clear_terminal();
     move_cursor_to(0,0);
     write_line("CHOOSE PROJECT:");
-    for(int i = 0; i < projects.size(); i++)
+    write("\n");
+    for(int i = projects.rows.size(); i > 0; i--)
     {
-        for(int j = 0; j < projects[i].size(); j++)
-        {
-            write(projects[i][j] + " ");
-        }
+        write(1 + ": ");
+        write(projects.rows[i].entries[1]);
         write("\n");
     }
+    write("\n");
     write_line("*: ADD PROJECT");
     write_line("0: BACK");
     refresh_terminal();
 }
 
-bool choose_project(char &input, vector<vector<string>> projects)
+bool choose_project(char &input, table projects)
 {
     print_project_menu(projects);
     switch(input)
@@ -70,7 +85,21 @@ bool choose_project(char &input, vector<vector<string>> projects)
             input = '\0';
             return true;
         case '0':
-            return true;
+            return false;
+        case '1':
+            return false;
+        case '2':
+            return false;
+        case '3':
+            return false;
+        case '4':
+            return false;
+        case '5':
+            return false;
+        case '-':
+            return false;
+        case '+':
+            return false;
         default:
             return false;
     }
@@ -78,11 +107,7 @@ bool choose_project(char &input, vector<vector<string>> projects)
 
 void choose_subject(char &input)
 {
-    move_cursor_to(0,0);
-    write_line("CHOOSE SUBJECT:");
-   
-    write_line("*: ADD SUBJECT");
-    refresh_terminal();
+
 }
 
 void print_menu()
@@ -96,16 +121,17 @@ void print_menu()
     refresh_terminal();
 }
 
-bool menu_action(char &input)
+bool menu_action(char &input, current_subject &subject)
 {
+
     bool back;
-    vector<vector<string>> projects;
+    table projects;
     print_menu();
     switch(input)
     {
         case '1':
             clear_terminal(); 
-            new_timer(input);
+            new_timer(input, subject);
             return false;
         case '2':
             input = '\0';
@@ -138,6 +164,7 @@ void setup_terminal()
 int main()
 {
     bool quit = false;
+    current_subject subject;
 
     setup_tables();
     std::this_thread::sleep_for (std::chrono::seconds(5));
@@ -152,7 +179,7 @@ int main()
     print_menu();
     while(quit == false)
     {
-        quit = menu_action(input);
+        quit = menu_action(input, subject);
     }
 
     write(input);
