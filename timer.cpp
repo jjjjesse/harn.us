@@ -85,9 +85,9 @@ void print_time(time_t current_time)
     write_line(local_time->tm_year);   
 }
 
-void new_timer(char &input, current_subject &subject)
+void new_timer(key_input &input, current_subject &subject)
 {
-    input = '\0';
+    input.input_char = '\0';
     bool timer_running = true;
     time_record timer;
     timer.start_time = get_current_time();
@@ -99,7 +99,7 @@ void new_timer(char &input, current_subject &subject)
         print_time(timer.start_time);
         ticker(timer);
         
-        if (input == '0') 
+        if (input.input_char == '0') 
         {
             timer.end_time = get_current_time();
             timer_running = false;
@@ -108,6 +108,6 @@ void new_timer(char &input, current_subject &subject)
     move_cursor_to(0,2);
     write_line("Timer stopped.");
     refresh_terminal();
-    input = '\0';
+    input.input_char = '\0';
     add_time_record(timer, subject);
 }

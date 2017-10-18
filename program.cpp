@@ -8,13 +8,14 @@
 
 
 
-void user_input(char &input)
-{
+void user_input(key_input &input)
+{   
+    input.input_pause = false;
     while(true)
-    {
-        std::cin>>input;
-        std::this_thread::sleep_for (std::chrono::seconds(1));
-    } 
+        while(!input.input_pause)
+        {
+            std::cin>>input.input_char;
+        } 
 }
 
 void add_project()
@@ -57,61 +58,115 @@ void add_subject()
     set_terminal_echo_input(false);
 }
 
-void print_project_menu(table projects)
+void print_project_menu(table &projects, current_subject &subject)
 {
     clear_terminal();
+    int no_rows;
     move_cursor_to(0,0);
+    if(!subject.project.empty())
+    {
+        write_line("CURRENT PROJECT IS:" + subject.project);
+    }
     write_line("CHOOSE PROJECT:");
     write("\n");
-    for(int i = projects.rows.size(); i > 0; i--)
+    int idx = projects.rows.size() - projects.offset - 1;
+    int limit = idx - 5;
+    if(idx < 5)
     {
-        write(1 + ": ");
-        write(projects.rows[i].entries[1]);
+        limit = 0;
+    }
+
+    for(int j = 1; idx > limit; idx--, j++)
+    {
+        write(to_string(j) + ": ");
+        write(projects.rows[idx].entries[1]);
         write("\n");
     }
+
     write("\n");
+    move_cursor_to(0,8);
+    if(projects.rows.size() > 5)
+    {
+        write_line("-: PREVIOUS  |  +: NEXT");
+    }
     write_line("*: ADD PROJECT");
     write_line("0: BACK");
     refresh_terminal();
 }
 
-bool choose_project(char &input, table projects)
+void set_project(table projects, current_subject &subject, int idx)
 {
-    print_project_menu(projects);
-    switch(input)
+    if(idx >= 0)
+    {
+        subject.project_id = convert_to_integer(projects.rows[idx].entries[0]);
+        subject.project = projects.rows[idx].entries[1];
+    }
+}
+
+bool choose_project(key_input &input, table &projects, current_subject &subject)
+{
+    print_project_menu(projects, subject);
+    int i = projects.rows.size() - projects.offset ;
+    switch(input.input_char)
     {
         case '*':
+            input.input_pause = true;
             add_project();
-            input = '\0';
+            input.input_char = '\0';
+            input.input_pause = false;
             return true;
         case '0':
-            return false;
+            input.input_char = '\0';
+            return true;
         case '1':
+            set_project(projects, subject, i - 1);
+            input.input_char = '\0';
             return false;
         case '2':
+            set_project(projects, subject, i - 2);
+            input.input_char = '\0';
             return false;
         case '3':
+            set_project(projects, subject, i - 3);
+            input.input_char = '\0';
             return false;
         case '4':
+            set_project(projects, subject, i - 4);
+            input.input_char = '\0';
             return false;
         case '5':
+            set_project(projects, subject, i - 5);
+            input.input_char = '\0';
             return false;
         case '-':
+            projects.offset -= 5;
+            if (projects.offset < 0)
+            {
+                projects.offset = 0;
+            }
+            input.input_char = '\0';
             return false;
         case '+':
+            projects.offset += 5;
+            if (projects.offset >= projects.rows.size())
+            {
+                projects.offset -= 5;
+            }
+            input.input_char = '\0';
             return false;
         default:
             return false;
     }
 }
 
-void choose_subject(char &input)
+void choose_subject(key_input &input)
 {
 
 }
 
 void print_menu()
 {
+    clear_terminal();
     move_cursor_to(0,0);
     write_line("1: START TIMER");
     write_line("2: CHANGE PROJECT");
@@ -121,25 +176,26 @@ void print_menu()
     refresh_terminal();
 }
 
-bool menu_action(char &input, current_subject &subject)
+bool menu_action(key_input &input, current_subject &subject)
 {
 
     bool back;
     table projects;
     print_menu();
-    switch(input)
+    switch(input.input_char)
     {
         case '1':
             clear_terminal(); 
             new_timer(input, subject);
             return false;
         case '2':
-            input = '\0';
+            input.input_char = '\0';
             projects = get_projects();
             while (back == false)
             {
-                back = choose_project(input, projects);
+                back = choose_project(input, projects, subject);
             }
+            back = false;
             return false;
         case '3':
             return false;
@@ -169,8 +225,8 @@ int main()
     setup_tables();
     std::this_thread::sleep_for (std::chrono::seconds(5));
 
-    char input;
-    input = '\0';
+    key_input input;
+    input.input_char = '\0';
 
     setup_terminal();
     thread check_input(user_input, std::ref(input));
@@ -182,7 +238,7 @@ int main()
         quit = menu_action(input, subject);
     }
 
-    write(input);
+    write(input.input_char);
     end_advanced_terminal();
 
     return 0;

@@ -39,6 +39,12 @@ struct table
     int offset;
 };
 
+struct key_input
+{
+    char input_char;
+    bool input_pause;
+};
+
 
 //FROM TIMER.CPP
 time_t get_current_time();
@@ -46,7 +52,7 @@ void seconds_to_hours(double seconds, time_record &timer);
 void display_timer(time_record timer);
 void ticker(time_record timer);
 void print_time(time_t current_time);
-void new_timer(char &input,current_subject &subject);
+void new_timer(key_input &input,current_subject &subject);
 
 //FROM DATABASE.CPP
 sqlite3* connect_database();
