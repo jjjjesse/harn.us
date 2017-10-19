@@ -75,7 +75,6 @@ void setup_tables()
          "SUBJECT_ID         INTEGER PRIMARY KEY     NOT NULL,"   
          "SUBJECT_NAME       TEXT                    NOT NULL," 
          "PROJECT_ID         INTEGER                 NOT NULL,"
-         "FINAL_MARK INT                             ,"
          "FOREIGN KEY(PROJECT_ID) REFERENCES PROJECT(PROJECT_ID));";
 
     record_sql =  "CREATE TABLE RECORD("            
@@ -139,8 +138,9 @@ table get_subjects(categories current_categories)
     table result;
     string sql_string;
 
-    sql_string = "SELECT * FROM SUBJECT"
-                 "WHERE PROJECT_ID = " + to_string(current_categories.project_id) + ";";
+    sql_string = "SELECT * FROM SUBJECT WHERE PROJECT_ID = " + to_string(current_categories.project_id) + ";";
+                 //"WHERE PROJECT_ID = 6;";
+
     sql = sql_string.c_str();
     result = select_data(sql);
     return result;

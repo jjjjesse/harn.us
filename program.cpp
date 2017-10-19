@@ -96,8 +96,6 @@ void print_categories(table &table_data)
     write("\n");
 }
 
-
-
 void print_submenu(table &table_data, categories &currect_categories, menu &current_menu)
 {
     clear_terminal();
@@ -131,7 +129,7 @@ void print_submenu(table &table_data, categories &currect_categories, menu &curr
     else if (current_menu == ENTRIES)
     {
         category_type = "ENTRIES";   
-    }
+    }+
     write_line("CHOOSE " + category_type + ":");
     write("\n");
     print_categories(table_data);
@@ -142,6 +140,11 @@ void print_submenu(table &table_data, categories &currect_categories, menu &curr
     }
     write_line("*: ADD " + category_type);
     write_line("0: BACK");
+
+    write(table_data.rows[0].entries[1]);
+    write(table_data.rows[0].entries[1]);
+    write("\n");
+
     refresh_terminal();
 }
 
@@ -156,8 +159,7 @@ bool submenu_action(key_input &input, table &table_data, categories &currect_cat
             add_category(current_menu, currect_categories);
             input.input_char = '\0';
             input.input_pause = false;
-            set_category(table_data, currect_categories, i, current_menu)
-            return true;
+            return false;
         case '0':
             input.input_char = '\0';
             return true;
@@ -202,14 +204,26 @@ bool submenu_action(key_input &input, table &table_data, categories &currect_cat
     }
 }
 
-void choose_subject(key_input &input)
-{
 
-}
-
-void print_menu()
+void print_menu(categories &currect_categories)
 {
     clear_terminal();
+    if(!currect_categories.project.empty())
+    {
+        write_line("CURRENT PROJECT IS: " + currect_categories.project);
+    }
+    else
+    {
+        write_line("NO PROJECT SELECTED");
+    }
+    if(!currect_categories.subject.empty())
+    {
+        write_line("CURRENT SUBJECT IS: " + currect_categories.subject);
+    }
+    else
+    {
+        write_line("NO SUBJECT SELECTED");
+    }
     move_cursor_to(0,3);
     write_line("1: START TIMER");
     write_line("2: CHOOSE PROJECT");
@@ -224,7 +238,7 @@ bool menu_action(key_input &input, categories &currect_categories)
     menu current_menu;
     bool back;
     table table_data;
-    print_menu();
+    print_menu(currect_categories);
     switch(input.input_char)
     {
         case '1':
@@ -251,22 +265,39 @@ bool menu_action(key_input &input, categories &currect_categories)
         case '2':
             input.input_char = '\0';
             table_data = get_projects();
+            back = false;
             while (back == false)
             {
                 current_menu = PROJECTS;
                 back = submenu_action(input, table_data, currect_categories, current_menu);
             }
-            input.input_char = '\0';
-            table_data = get_subjects(currect_categories);
-            back = false;
-            while (back == false)
-            {
-                current_menu = SUBJECTS;
-                back = submenu_action(input, table_data, currect_categories, current_menu);
-            }
             back = false;
             return false;
         case '3':
+            if(currect_categories.project_id)
+            {
+                input.input_char = '\0';
+                table_data = get_subjects(currect_categories);
+                back = false;
+                while (back == false)
+                {
+                    current_menu = SUBJECTS;
+                    back = submenu_action(input, table_data, currect_categories, current_menu);
+                }
+            }
+            else
+            {
+                 while(input.input_char != '1')
+                {
+                    clear_terminal();
+                    write_line("PLEASE CHOOSE PROJECT FIRST");
+                    move_cursor_to(0,3);
+                    write_line("1: CONTINUE");
+                    refresh_terminal();
+                }
+                input.input_char = '\0';
+            }
+            
             return false;
         case '4':
             return false;
@@ -300,7 +331,6 @@ int main()
     thread check_input(user_input, std::ref(input));
     check_input.detach();
 
-    print_menu();
     while(quit == false)
     {
         quit = menu_action(input, currect_categories);
