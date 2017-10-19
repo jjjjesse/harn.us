@@ -79,10 +79,10 @@ void setup_tables()
 
     record_sql =  "CREATE TABLE RECORD("            
          "RECORD_ID          INTEGER  PRIMARY KEY    NOT NULL," 
-         "SUBJECT_ID         INTEGER                 NOT NULL,"  
+         "SUBJECT_ID         INTEGER                 NOT NULL," 
+         "DATE               TEXT                    NOT NULL,"
          "START_TIME         TEXT                    NOT NULL," 
          "END_TIME           TEXT                    NOT NULL," 
-         "LENGTH             TEXT                    NOT NULL,"
          "FOREIGN KEY(SUBJECT_ID) REFERENCES SUBJECT(SUBJECT_ID));";
 
     execute_sql(project_sql);
@@ -139,9 +139,18 @@ table get_subjects(categories current_categories)
     string sql_string;
 
     sql_string = "SELECT * FROM SUBJECT WHERE PROJECT_ID = " + to_string(current_categories.project_id) + ";";
-                 //"WHERE PROJECT_ID = 6;";
+
 
     sql = sql_string.c_str();
+    result = select_data(sql);
+    return result;
+}
+
+table get_records()
+{
+    const char *sql;
+    table result;
+    sql = "SELECT  TIME(START_TIME, 'UNIXEPOCH', 'LOCALTIME') , TIME(END_TIME, 'UNIXEPOCH', 'LOCALTIME'), DATE, TIME(END_TIME - START_TIME, 'UNIXEPOCH', 'LOCALTIME') FROM RECORD; ";
     result = select_data(sql);
     return result;
 }
@@ -171,9 +180,11 @@ void add_time_record(time_record record, categories &current_categories)
     string sql_string;
     const char *sql; 
 
-    sql_string = "INSERT INTO RECORD (SUBJECT_ID, START_TIME, END_TIME, LENGTH)"
-                 "VALUES (" + to_string(current_categories.subject_id) + ", '" +  to_string(record.start_time) + "' , '" + to_string(record.end_time) + "' , '" + to_string(record.hours) + ":" + to_string(record.minutes) + ":" + to_string(record.seconds) + "' );";
+    sql_string = "INSERT INTO RECORD (DATE, SUBJECT_ID, START_TIME, END_TIME)"
+                 "VALUES ( date('now')" + to_string(current_categories.subject_id) + ", '" +  to_string(record.start_time) + "' , '" + to_string(record.end_time) + "');";
 
     sql = sql_string.c_str();
     execute_sql(sql); 
 }
+
+

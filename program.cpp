@@ -129,7 +129,7 @@ void print_submenu(table &table_data, categories &currect_categories, menu &curr
     else if (current_menu == ENTRIES)
     {
         category_type = "ENTRIES";   
-    }+
+    }
     write_line("CHOOSE " + category_type + ":");
     write("\n");
     print_categories(table_data);
