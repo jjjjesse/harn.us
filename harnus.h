@@ -19,7 +19,7 @@ struct time_record
     int hours;
 };
 
-struct current_subject
+struct categories
 {
     int project_id;
     string project;
@@ -52,7 +52,7 @@ void seconds_to_hours(double seconds, time_record &timer);
 void display_timer(time_record timer);
 void ticker(time_record timer);
 void print_time(time_t current_time);
-void new_timer(key_input &input,current_subject &subject);
+void new_timer(key_input &input,categories &current_categories);
 
 //FROM DATABASE.CPP
 sqlite3* connect_database();
@@ -62,4 +62,4 @@ table select_data(const char *sql);
 table get_projects();
 void add_project_sql(string project_name);
 void add_subject_sql(string subject_name);
-void add_time_record(time_record record, current_subject subject);
+void add_time_record(time_record record, categories &current_categories);

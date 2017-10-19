@@ -48,3 +48,9 @@
 2017-10-19 02:25:49,985 WARN  [default] Aborting application. Reason: Fatal log at [/home/jesse/.splashkit/source/../include/easylogging++.h:5627]
 2017-10-19 02:26:20,681 FATAL [default] CRASH HANDLED; Application has crashed due to [SIGINT] signal
 2017-10-19 02:26:20,681 WARN  [default] Aborting application. Reason: Fatal log at [/home/jesse/.splashkit/source/../include/easylogging++.h:5627]
+2017-10-19 11:30:26,945 FATAL [default] CRASH HANDLED; Application has crashed due to [SIGINT] signal
+2017-10-19 11:30:26,945 WARN  [default] Aborting application. Reason: Fatal log at [/home/jesse/.splashkit/source/../include/easylogging++.h:5627]
+2017-10-19 11:31:06,641 FATAL [default] CRASH HANDLED; Application has crashed due to [SIGINT] signal
+2017-10-19 11:31:06,642 WARN  [default] Aborting application. Reason: Fatal log at [/home/jesse/.splashkit/source/../include/easylogging++.h:5627]
+2017-10-19 11:36:18,592 FATAL [default] CRASH HANDLED; Application has crashed due to [SIGINT] signal
+2017-10-19 11:36:18,593 WARN  [default] Aborting application. Reason: Fatal log at [/home/jesse/.splashkit/source/../include/easylogging++.h:5627]

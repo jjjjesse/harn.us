@@ -153,13 +153,13 @@ void add_subject_sql(string subject_name)
     execute_sql(sql); 
 }
 
-void add_time_record(time_record record, current_subject subject)
+void add_time_record(time_record record, categories &current_categories)
 {
     string sql_string;
     const char *sql; 
 
     sql_string = "INSERT INTO RECORD (SUBJECT_ID, START_TIME, END_TIME, LENGTH)"
-                 "VALUES (" + to_string(subject.subject_id) + ", '" +  to_string(record.start_time) + "' , '" + to_string(record.end_time) + "' , '" + to_string(record.hours) + ":" + to_string(record.minutes) + ":" + to_string(record.seconds) + "' );";
+                 "VALUES (" + to_string(current_categories.subject_id) + ", '" +  to_string(record.start_time) + "' , '" + to_string(record.end_time) + "' , '" + to_string(record.hours) + ":" + to_string(record.minutes) + ":" + to_string(record.seconds) + "' );";
 
     sql = sql_string.c_str();
     execute_sql(sql); 
