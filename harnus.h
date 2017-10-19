@@ -52,14 +52,25 @@ struct key_input
     bool input_pause;
 };
 
+//FROM MENUS.CPP
+void print_submenu(table &table_data, categories &currect_categories, menu &current_menu);
+bool submenu_action(key_input &input, table &table_data, categories &currect_categories, menu &current_menu);
+bool menu_action(key_input &input, categories &currect_categories);
+void print_menu(categories &currect_categories);
 
-//FROM TIMER.CPP65
+//FROM TIMER.CPP
 time_t get_current_time();
 void seconds_to_hours(double seconds, time_record &timer);
 void display_timer(time_record timer);
 void ticker(time_record timer);
 void print_time(time_t current_time);
 void new_timer(key_input &input,categories &current_categories);
+
+//FROM CATEGORIES.CPP
+void set_category(table projects, categories &currect_categories, int idx, menu &current_menu);
+void add_category(menu &current_menu, categories &currect_categories);
+void print_categories(table &table_data);
+void print_timestamps(table &table_data);
 
 //FROM DATABASE.CPP
 sqlite3* connect_database();
