@@ -5,12 +5,7 @@
 #include <sqlite3.h>  
 #include <chrono>     
  
-enum menu
-{
-    PROJECTS,
-    SUBJECTS,
-    ENTRIES
-};
+
 
 
 void user_input(key_input &input)
@@ -96,6 +91,32 @@ void print_categories(table &table_data)
     write("\n");
 }
 
+void print_timestamps(table &table_data)
+{
+    write_line("TIME RECORDS");
+    move_cursor_to(0,3);
+    int idx = table_data.rows.size() - table_data.offset - 1;
+    int limit = idx - 5;
+    if(idx < 5)
+    {
+        limit = -1;
+    }
+    for(int j = 1; idx > limit; idx--, j++)
+    {
+        write(to_string(j) + ": ");
+        write("TIME: ");
+        write(table_data.rows[idx].entries[0]);
+        write("      ");
+        write(table_data.rows[idx].entries[1]);
+        write(" | ");
+        write(table_data.rows[idx].entries[2]);
+
+        write("\n");
+    }
+
+}
+
+
 void print_submenu(table &table_data, categories &currect_categories, menu &current_menu)
 {
     clear_terminal();
@@ -126,23 +147,31 @@ void print_submenu(table &table_data, categories &currect_categories, menu &curr
             write_line("NO SUBJECT SELECTED");
         }
     }
-    else if (current_menu == ENTRIES)
+    
+    
+    if (current_menu == ENTRIES)
     {
-        category_type = "ENTRIES";   
+        print_timestamps(table_data); 
     }
-    write_line("CHOOSE " + category_type + ":");
-    write("\n");
-    print_categories(table_data);
+    else
+    {
+        move_cursor_to(0,1);
+        write_line("CHOOSE " + category_type + ":");
+        write("\n");
+        print_categories(table_data);
+    }
     move_cursor_to(0,9);
     if(table_data.rows.size() > 5)
     {
         write_line("-: PREVIOUS       +: NEXT");
     }
-    write_line("*: ADD " + category_type);
+    if (current_menu != ENTRIES)
+    {
+        write_line("*: ADD " + category_type);
+    }
     write_line("0: BACK");
 
     refresh_terminal();
-    write(table_data.rows[0].entries[1]);
 }
 
 bool submenu_action(key_input &input, table &table_data, categories &currect_categories, menu &current_menu)
@@ -156,7 +185,7 @@ bool submenu_action(key_input &input, table &table_data, categories &currect_cat
             add_category(current_menu, currect_categories);
             input.input_char = '\0';
             input.input_pause = false;
-            return false;
+            return true;
         case '0':
             input.input_char = '\0';
             return true;
@@ -297,6 +326,14 @@ bool menu_action(key_input &input, categories &currect_categories)
             
             return false;
         case '4':
+            input.input_char = '\0';
+            table_data = get_records();
+            back = false;
+            while (back == false)
+            {
+                current_menu = ENTRIES;
+                back = submenu_action(input, table_data, currect_categories, current_menu);
+            }
             return false;
         case '0':
             return true;

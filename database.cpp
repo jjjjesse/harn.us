@@ -150,7 +150,8 @@ table get_records()
 {
     const char *sql;
     table result;
-    sql = "SELECT  TIME(START_TIME, 'UNIXEPOCH', 'LOCALTIME') , TIME(END_TIME, 'UNIXEPOCH', 'LOCALTIME'), DATE, TIME(END_TIME - START_TIME, 'UNIXEPOCH', 'LOCALTIME') FROM RECORD; ";
+    
+    sql = "SELECT TIME(RECORD.END_TIME - RECORD.START_TIME, 'UNIXEPOCH'), SUBJECT.SUBJECT_NAME, PROJECT.PROJECT_NAME, TIME(START_TIME, 'UNIXEPOCH', 'LOCALTIME') , DATE FROM RECORD JOIN SUBJECT ON SUBJECT.SUBJECT_ID = RECORD.SUBJECT_ID JOIN PROJECT ON PROJECT.PROJECT_ID = SUBJECT.PROJECT_ID;";
     result = select_data(sql);
     return result;
 }
@@ -181,7 +182,7 @@ void add_time_record(time_record record, categories &current_categories)
     const char *sql; 
 
     sql_string = "INSERT INTO RECORD (DATE, SUBJECT_ID, START_TIME, END_TIME)"
-                 "VALUES ( date('now')" + to_string(current_categories.subject_id) + ", '" +  to_string(record.start_time) + "' , '" + to_string(record.end_time) + "');";
+                 "VALUES ( date('now')," + to_string(current_categories.subject_id) + ", '" +  to_string(record.start_time) + "' , '" + to_string(record.end_time) + "');";
 
     sql = sql_string.c_str();
     execute_sql(sql); 

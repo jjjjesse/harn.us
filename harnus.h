@@ -10,6 +10,13 @@
 
 using namespace std;
 
+enum menu
+{
+    PROJECTS,
+    SUBJECTS,
+    ENTRIES
+};
+
 struct time_record
 {
     time_t start_time;
@@ -61,6 +68,7 @@ void setup_tables();
 table select_data(const char *sql);
 table get_subjects(categories current_categories);
 table get_projects();
+table get_records();
 void add_project_sql(string project_name);
 void add_subject_sql(string subject_name, categories &currect_categories);
 void add_time_record(time_record record, categories &current_categories);
