@@ -78,3 +78,5 @@
 2017-10-19 15:37:12,104 WARN  [default] Aborting application. Reason: Fatal log at [/home/jesse/.splashkit/source/../include/easylogging++.h:5627]
 2017-10-19 15:45:23,080 FATAL [default] CRASH HANDLED; Application has crashed due to [SIGSEGV] signal
 2017-10-19 15:45:23,080 WARN  [default] Aborting application. Reason: Fatal log at [/home/jesse/.splashkit/source/../include/easylogging++.h:5627]
+2017-10-19 15:48:41,838 FATAL [default] CRASH HANDLED; Application has crashed due to [SIGSEGV] signal
+2017-10-19 15:48:41,838 WARN  [default] Aborting application. Reason: Fatal log at [/home/jesse/.splashkit/source/../include/easylogging++.h:5627]

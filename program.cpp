@@ -190,7 +190,7 @@ bool submenu_action(key_input &input, table &table_data, categories &currect_cat
             return false;
         case '+':
             table_data.offset += 5;
-            if (table_data.offset >= table_data.rows.size() -1)
+            if (table_data.offset > table_data.rows.size() -1)
             {
                 table_data.offset -= 5;
             }
