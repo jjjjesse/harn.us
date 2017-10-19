@@ -46,7 +46,7 @@ struct key_input
 };
 
 
-//FROM TIMER.CPP
+//FROM TIMER.CPP65
 time_t get_current_time();
 void seconds_to_hours(double seconds, time_record &timer);
 void display_timer(time_record timer);
@@ -59,7 +59,8 @@ sqlite3* connect_database();
 void create_table(char *sql);
 void setup_tables();
 table select_data(const char *sql);
+table get_subjects(categories current_categories);
 table get_projects();
 void add_project_sql(string project_name);
-void add_subject_sql(string subject_name);
+void add_subject_sql(string subject_name, categories &currect_categories);
 void add_time_record(time_record record, categories &current_categories);

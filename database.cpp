@@ -72,9 +72,9 @@ void setup_tables()
          "PROJECT_NAME       TEXT                    NOT NULL);";
 
     subject_sql = "CREATE TABLE SUBJECT("           
-         "SUBJECT_ID         INTEGER PRIMARY KEY     NOT NULL," 
-         "PROJECT_ID         INTEGER                 NOT NULL,"  
+         "SUBJECT_ID         INTEGER PRIMARY KEY     NOT NULL,"   
          "SUBJECT_NAME       TEXT                    NOT NULL," 
+         "PROJECT_ID         INTEGER                 NOT NULL,"
          "FINAL_MARK INT                             ,"
          "FOREIGN KEY(PROJECT_ID) REFERENCES PROJECT(PROJECT_ID));";
 
@@ -133,6 +133,19 @@ table get_projects()
     return result;
 }
 
+table get_subjects(categories current_categories)
+{
+    const char *sql;
+    table result;
+    string sql_string;
+
+    sql_string = "SELECT * FROM SUBJECT"
+                 "WHERE PROJECT_ID = " + to_string(current_categories.project_id) + ";";
+    sql = sql_string.c_str();
+    result = select_data(sql);
+    return result;
+}
+
 void add_project_sql(string project_name)
 {
     string sql_string;
@@ -143,12 +156,12 @@ void add_project_sql(string project_name)
     execute_sql(sql); 
 }
 
-void add_subject_sql(string subject_name)
+void add_subject_sql(string subject_name, categories &currect_categories)
 {
     string sql_string;
     const char *sql;
 
-    sql_string = "INSERT INTO PROJECT (SUBJECT_NAME) VALUES ('" + subject_name + "');";
+    sql_string = "INSERT INTO SUBJECT (SUBJECT_NAME, PROJECT_ID) VALUES ('" + subject_name + "' , " + to_string(currect_categories.project_id) + " );";
     sql = sql_string.c_str();
     execute_sql(sql); 
 }
