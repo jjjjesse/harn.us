@@ -141,11 +141,8 @@ void print_submenu(table &table_data, categories &currect_categories, menu &curr
     write_line("*: ADD " + category_type);
     write_line("0: BACK");
 
-    write(table_data.rows[0].entries[1]);
-    write(table_data.rows[0].entries[1]);
-    write("\n");
-
     refresh_terminal();
+    write(table_data.rows[0].entries[1]);
 }
 
 bool submenu_action(key_input &input, table &table_data, categories &currect_categories, menu &current_menu)
