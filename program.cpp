@@ -156,6 +156,7 @@ bool submenu_action(key_input &input, table &table_data, categories &currect_cat
             add_category(current_menu, currect_categories);
             input.input_char = '\0';
             input.input_pause = false;
+            set_category(table_data, currect_categories, i, current_menu)
             return true;
         case '0':
             input.input_char = '\0';
